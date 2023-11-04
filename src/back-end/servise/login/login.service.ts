@@ -5,17 +5,11 @@ import {LoginType} from '../../type/login/login.type' ;
 @Injectable()
 export class LoginService {
     
-   async  login({username , password} : LoginType ) {
-      let isUser : boolean = false;      
+   async login({username , password} : LoginType ) { 
       let usersInfoTable = db.getRepository(UsersInfo);
       let queryBuilder = usersInfoTable.createQueryBuilder('usersInfo');
       let userInfo : UsersInfo[] = await queryBuilder.getMany();
-        for(let user of userInfo){
-          if(user.username == username && user.password == password ){
-            isUser = true
-            break ; 
-          }
-          return isUser
-        }
+      const isUser = userInfo.find(user => user.username === username && user.password === password) !== undefined;
+        return isUser
     }
 }
